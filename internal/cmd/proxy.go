@@ -147,12 +147,19 @@ func (conf *configuration) initUpstreams(
 		return fmt.Errorf("initializing bootstrap: %w", err)
 	}
 
+	httpHeaders := map[string]string{}
+	for _, h := range conf.UpstreamHTTPHeaders {
+		name, value, _ := strings.Cut(h, ":")
+		httpHeaders[strings.TrimSpace(name)] = strings.TrimSpace(value)
+	}
+
 	upsOpts := &upstream.Options{
 		Logger:             l,
 		HTTPVersions:       httpVersions,
 		InsecureSkipVerify: conf.Insecure,
 		Bootstrap:          boot,
 		Timeout:            timeout,
+		HTTPHeaders:        httpHeaders,
 	}
 	upstreams := loadServersList(conf.Upstreams)
 

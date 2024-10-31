@@ -64,6 +64,7 @@ const (
 	enableEDNSSubnetIdx
 	dns64Idx
 	usePrivateRDNSIdx
+	upstreamHTTPHeaders
 )
 
 // commandLineOption contains information about a command-line option: its long
@@ -383,6 +384,12 @@ var commandLineOptions = []*commandLineOption{
 		short:     "",
 		valueType: "",
 	},
+	upstreamHTTPHeaders: {
+		description: "Custom HTTP headers (name: value) for DoH usptream.",
+		long:        "upstream-http-header",
+		short:       "",
+		valueType:   "",
+	},
 }
 
 // parseCmdLineOptions parses the command-line options.  conf must not be nil.
@@ -439,6 +446,7 @@ func parseCmdLineOptions(conf *configuration) (err error) {
 		enableEDNSSubnetIdx:       &conf.EnableEDNSSubnet,
 		dns64Idx:                  &conf.DNS64,
 		usePrivateRDNSIdx:         &conf.UsePrivateRDNS,
+		upstreamHTTPHeaders:       &conf.UpstreamHTTPHeaders,
 	} {
 		addOption(flags, fieldPtr, commandLineOptions[i])
 	}

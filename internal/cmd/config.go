@@ -187,6 +187,10 @@ type configuration struct {
 	// lookups of private addresses, including the requests for authority
 	// records, such as SOA and NS.
 	UsePrivateRDNS bool `yaml:"use-private-rdns"`
+
+	// Custom HTTP headers (name: value) for DoH upstream.
+	// This option can be specified multiple times.
+	UpstreamHTTPHeaders []string `yaml:"upstream-http-header"`
 }
 
 // parseConfig returns options parsed from the command args or config file.  If

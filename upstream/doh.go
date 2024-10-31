@@ -81,6 +81,9 @@ type dnsOverHTTPS struct {
 
 	// timeout is used in HTTP client and for H3 probes.
 	timeout time.Duration
+
+	// Custom HTTP headers.
+	httpHeaders map[string]string
 }
 
 // newDoH returns the DNS-over-HTTPS Upstream.
@@ -123,6 +126,7 @@ func newDoH(addr *url.URL, opts *Options) (u Upstream, err error) {
 		logger:       opts.Logger,
 		addrRedacted: addr.Redacted(),
 		timeout:      opts.Timeout,
+		httpHeaders:  opts.HTTPHeaders,
 	}
 	for _, v := range httpVersions {
 		ups.tlsConf.NextProtos = append(ups.tlsConf.NextProtos, string(v))
@@ -273,6 +277,10 @@ func (p *dnsOverHTTPS) exchangeHTTPSClient(
 	// https://github.com/AdguardTeam/dnsproxy/issues/211.
 	httpReq.Header.Set(httphdr.UserAgent, "")
 	httpReq.Header.Set(httphdr.Accept, "application/dns-message")
+
+	for name, value := range p.httpHeaders {
+		httpReq.Header.Set(name, value)
+	}
 
 	httpResp, err := client.Do(httpReq)
 	if err != nil {

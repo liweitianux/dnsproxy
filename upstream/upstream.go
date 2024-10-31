@@ -103,6 +103,9 @@ type Options struct {
 	// PreferIPv6 tells the bootstrapper to prefer IPv6 addresses for an
 	// upstream.
 	PreferIPv6 bool
+
+	// Custom HTTP headers.
+	HTTPHeaders map[string]string
 }
 
 // Clone copies o to a new struct.  Note, that this is not a deep clone.
@@ -120,6 +123,7 @@ func (o *Options) Clone() (clone *Options) {
 		RootCAs:                   o.RootCAs,
 		CipherSuites:              o.CipherSuites,
 		Logger:                    o.Logger,
+		HTTPHeaders:               o.HTTPHeaders,
 	}
 }
 
